@@ -15,6 +15,9 @@ const BillSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Customer',
     },
+    bill_date_string:{
+        type: String,
+    },
     bill_date: {
         type: Date,
         require: true
