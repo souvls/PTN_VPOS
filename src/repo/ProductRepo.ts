@@ -106,7 +106,7 @@ export async function findProductByKey(key: string) {
 export async function updateManyQTYProduct(cart: { product_id: string, product_qty: number }[]) {
     try {
         for (const { product_id, product_qty } of cart) {
-            await Product.updateMany(
+            await Product.findOneAndUpdate(
                 { product_id: product_id },
                 { $inc: { product_qty: -product_qty } }
             );
