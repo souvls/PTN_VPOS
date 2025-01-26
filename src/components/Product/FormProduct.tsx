@@ -18,6 +18,25 @@ interface Data {
     categorys: Categorys[],
     units: Units[]
 }
+interface Product {
+    product_id: string,
+    product_name: string,
+    product_size: string,
+    product_qty: number,
+    product_category: Categorys,
+    product_unit: Units,
+    product_price_buy_THB: number,
+    product_price_sale1_THB: number,
+    product_price_sale2_THB: number,
+    product_price_buy_LAK: number,
+    product_price_sale1_LAK: number,
+    product_price_sale2_LAK: number,
+    product_point: number,
+    product_discount: number,
+    product_exp: string,
+    product_mfd: string,
+    product_address: string,
+}
 const product = {
     product_id: "",
     product_name: "",
@@ -31,7 +50,7 @@ const product = {
     product_price_buy_LAK: 0,
     product_price_sale1_LAK: 0,
     product_price_sale2_LAK: 0,
-    product_point: 1,
+    product_point: 0,
     product_discount: 0,
     product_exp: "",
     product_mfd: "",
@@ -41,8 +60,20 @@ const FormProduct = () => {
     const router = useRouter();
     const barcode = useRef<HTMLInputElement>(null);
     const name = useRef<HTMLInputElement>(null);
+    const ref_size = useRef<HTMLInputElement>(null);
+    const ref_qty = useRef<HTMLInputElement>(null);
+    const ref_category = useRef<HTMLSelectElement>(null);
+    const ref_unit = useRef<HTMLSelectElement>(null);
+    const ref_price1 = useRef<HTMLInputElement>(null);
+    const ref_price2 = useRef<HTMLInputElement>(null);
+    const ref_price3 = useRef<HTMLInputElement>(null);
+    const ref_price4 = useRef<HTMLInputElement>(null);
+    const ref_price5 = useRef<HTMLInputElement>(null);
+    const ref_price6 = useRef<HTMLInputElement>(null);
+    const btnSubmit = useRef<HTMLButtonElement>(null);
+
     const [btnSave, setBtnSave] = useState(true);
-    const [newProduct, setNewProduct] = React.useState(product);
+    const [newProduct, setNewProduct] = useState<Product>(product);
     const [unitsList, setUnitList] = React.useState<Units[]>();
     const [categoryList, setCategoryList] = React.useState<Categorys[]>();
     const [isLoading, setIsLoading] = React.useState(false);
@@ -51,14 +82,18 @@ const FormProduct = () => {
     useEffect(() => {
         getUnits();
         getCategorys();
+        barcode.current?.focus();
     }, [])
     async function getUnits() {
         const res = await axios.get(`/api/unit`);
         setUnitList(res.data.result);
+
     }
     async function getCategorys() {
         const res = await axios.get(`/api/category`);
         setCategoryList(res.data.result);
+
+
     }
     const handleSumQty = async (id: string, qty: number) => {
         setIsLoading(true);
@@ -70,6 +105,54 @@ const FormProduct = () => {
                 icon: "success",
                 timer: 1000
             })
+        }
+    }
+    const handlePriceBuyLAK = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const inputValue = e.target.value.replace(/,/g, ''); // Loại bỏ dấu phẩy
+        const numericValue = Number(inputValue); // Chuyển đổi về số
+
+        if (!isNaN(numericValue)) {
+            setNewProduct({ ...newProduct, product_price_buy_LAK: numericValue })
+        }
+    }
+    const handlePriceBuyTHB = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const inputValue = e.target.value.replace(/,/g, ''); // Loại bỏ dấu phẩy
+        const numericValue = Number(inputValue); // Chuyển đổi về số
+
+        if (!isNaN(numericValue)) {
+            setNewProduct({ ...newProduct, product_price_buy_THB: numericValue })
+        }
+    }
+    const handlePriceSale1LAK = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const inputValue = e.target.value.replace(/,/g, ''); // Loại bỏ dấu phẩy
+        const numericValue = Number(inputValue); // Chuyển đổi về số
+
+        if (!isNaN(numericValue)) {
+            setNewProduct({ ...newProduct, product_price_sale1_LAK: numericValue })
+        }
+    }
+    const handlePriceSale2LAK = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const inputValue = e.target.value.replace(/,/g, ''); // Loại bỏ dấu phẩy
+        const numericValue = Number(inputValue); // Chuyển đổi về số
+
+        if (!isNaN(numericValue)) {
+            setNewProduct({ ...newProduct, product_price_sale2_LAK: numericValue })
+        }
+    }
+    const handlePriceSale1THB = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const inputValue = e.target.value.replace(/,/g, ''); // Loại bỏ dấu phẩy
+        const numericValue = Number(inputValue); // Chuyển đổi về số
+
+        if (!isNaN(numericValue)) {
+            setNewProduct({ ...newProduct, product_price_sale1_THB: numericValue })
+        }
+    }
+    const handlePriceSale2THB = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const inputValue = e.target.value.replace(/,/g, ''); // Loại bỏ dấu phẩy
+        const numericValue = Number(inputValue); // Chuyển đổi về số
+
+        if (!isNaN(numericValue)) {
+            setNewProduct({ ...newProduct, product_price_sale2_THB: numericValue })
         }
     }
     const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -99,7 +182,8 @@ const FormProduct = () => {
                             confirmButtonText: "ເພີ່ມຈຳນວນ",
                             denyButtonText: `ແກ້ໄຂ`,
                             cancelButtonText: 'ປິດ',
-                            allowOutsideClick: false
+                            allowOutsideClick: false,
+                            focusCancel: true,
                         }).then(async (result) => {
                             if (result.isConfirmed) {
                                 const { value: qty } = await Swal.fire({
@@ -154,23 +238,28 @@ const FormProduct = () => {
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "ເພີ່ມ",
-                cancelButtonText: "ຍົກເລີກ"
+                cancelButtonText: "ຍົກເລີກ",
+                focusConfirm:true
             }).then(async result => {
                 if (result.isConfirmed) {
                     setIsLoading(true)
                     const res = await axios.post("/api/products", { newProduct })
                     setIsLoading(false)
                     if (res.data.code === 999) {
+
+                        // setErrors({ product_id: "", product_name: "", product_category: "", product_unit: "" })
                         setNewProduct(product);
-                        setBtnSave(true);
-                        if (barcode.current) {
+                        if(barcode.current){
                             barcode.current.focus();
                         }
+                        setBtnSave(true);
                         Swal.fire({
                             title: "ເພີ່ມສິນຄ້າສຳເລັດ",
                             icon: "success",
-                            timer: 1000
+                            timer: 1000,
+                            
                         })
+                        // loadData();
                     } else {
                         Swal.fire("noooooo")
                     }
@@ -197,7 +286,7 @@ const FormProduct = () => {
                             onChange={(e) => setNewProduct({ ...newProduct, product_id: e.target.value.trim() })}
                             onKeyPress={handleKeyPress}
                             ref={barcode}
-                            autoFocus
+                            
                         />
                         {errors.product_id && <span className=' text-red-500 text-sm'>{errors.product_id}</span>}
                     </div>
@@ -209,6 +298,15 @@ const FormProduct = () => {
                                 type="text"
                                 label="ໍຊື່ສິນຄ້າ"
                                 ref={name}
+                                onKeyDown={(e) => {
+
+                                    if (e.key === "ArrowRight") {
+                                        ref_size.current?.focus();
+                                    }
+                                    if (e.key === "ArrowDown") {
+                                        ref_qty.current?.focus();
+                                    }
+                                }}
                                 value={newProduct?.product_name}
                                 isInvalid={errors.product_name ? true : false}
                                 onChange={(e) => setNewProduct({ ...newProduct, product_name: e.target.value })}
@@ -221,6 +319,19 @@ const FormProduct = () => {
                                 variant="bordered"
                                 type="text"
                                 label="ຂະໜາດ/ປະລິມານ"
+                                ref={ref_size}
+                                onKeyDown={(e) => {
+
+                                    if (e.key === "ArrowLeft") {
+                                        name.current?.focus();
+                                    }
+                                    if (e.key === "ArrowDown") {
+                                        ref_qty.current?.focus();
+                                    }
+                                    if (e.key === "ArrowRight") {
+                                        ref_qty.current?.focus();
+                                    }
+                                }}
                                 value={newProduct.product_size}
                                 onChange={(e) => setNewProduct({ ...newProduct, product_size: e.target.value })}
                             />
@@ -231,26 +342,52 @@ const FormProduct = () => {
                             size={"md"}
                             variant="bordered"
                             type="number"
+                            ref={ref_qty}
+                            onKeyDown={(e) => {
+                                if (e.key === "ArrowRight") {
+                                    ref_unit.current?.focus();
+                                }
+                                if (e.key === "ArrowLeft") {
+                                    name.current?.focus();
+                                }
+                            }}
                             label="ຈຳນວນ"
+                            min={0}
                             value={newProduct.product_qty.toString()}
                             onChange={(e) => setNewProduct({ ...newProduct, product_qty: parseInt(e.target.value) })}
                         />
                         <div className='w-full'>
                             <p>ໜ່ວຍເອີ້ນສິນຄ້າ</p>
                             <select
+                                id='unit'
+                                ref={ref_unit}
                                 className=' border rounded-lg'
-                                value={newProduct.product_unit._id}
-                                onChange={(e) => setNewProduct({
-                                    ...newProduct, product_unit: {
-                                        ...newProduct.product_unit,
-                                        _id: e.target.value
+                                onKeyDown={(e) => {
+                                    if (e.key === "ArrowRight") {
+                                        e.preventDefault();
+                                        ref_category.current?.focus();
                                     }
-                                })}
+                                    if (e.key === "ArrowLeft") {
+                                        e.preventDefault();
+                                        ref_qty.current?.focus();
+                                    }
+                                }}
+                                value={newProduct.product_unit._id}
+                                onChange={(e) => {
+                                    setNewProduct({
+                                        ...newProduct, product_unit: {
+                                            ...newProduct.product_unit,
+                                            _id: e.target.value
+                                        }
+                                    })
+                                    localStorage.setItem("unit", e.target.value);
+                                }
+                                }
                             >
-                                <option value={""} selected>...</option>
+                                <option value={""} >...</option>
                                 {unitsList && unitsList.map((item, index) => {
                                     return (
-                                        <option key={index} value={item._id}>
+                                        <option key={item._id} value={item._id} >
                                             {item.unit_name}
                                         </option>
                                     )
@@ -263,21 +400,37 @@ const FormProduct = () => {
                         <div className='w-full'>
                             <p>ປະເພດສິນຄ້າ</p>
                             <select
+                                id='category'
                                 className=' border rounded-lg'
-                                value={newProduct.product_category._id}
-                                onChange={(e) => setNewProduct({
-                                    ...newProduct, product_category: {
-                                        ...newProduct.product_category,
-                                        _id: e.target.value
+                                ref={ref_category}
+                                onKeyDown={(e) => {
+                                    if (e.key === "ArrowRight") {
+                                        e.preventDefault();
+                                        ref_price1.current?.focus();
                                     }
-                                })}
+                                    if (e.key === "ArrowLeft") {
+                                        e.preventDefault();
+                                        ref_unit.current?.focus();
+                                    }
+                                }}
+                                value={newProduct.product_category._id}
+                                onChange={(e) => {
+                                    localStorage.setItem("category", e.target.value);
+                                    setNewProduct({
+                                        ...newProduct, product_category: {
+                                            ...newProduct.product_category,
+                                            _id: e.target.value
+                                        }
+                                    })
+                                }}
                             >
-                                <option value={""} selected>...</option>
+                                <option value={""}>...</option>
                                 {categoryList && categoryList.map((item, index) => {
                                     return (
-                                        <option key={index} value={item._id}>
+                                        <option key={item._id} value={item._id}>
                                             {item.category_name}
                                         </option>
+
                                     )
                                 })}
                             </select>
@@ -343,18 +496,57 @@ const FormProduct = () => {
                             <Input
                                 size={"md"}
                                 color='primary'
-                                type="number"
+                                type="text"
+                                ref={ref_price1}
+                                onKeyDown={(e) => {
+
+                                    if (e.key === "ArrowRight") {
+                                        ref_price2.current?.focus();
+                                    }
+                                    if (e.key === "ArrowDown") {
+                                        ref_price3.current?.focus();
+                                        ref_price3.current?.setSelectionRange(newProduct.product_price_sale1_LAK.toString().length + 2, newProduct.product_price_sale1_LAK.toString().length + 2);
+
+                                    }
+                                    if (e.key === "Enter") {
+                                        if (newProduct.product_price_buy_LAK === 0) {
+                                            ref_price1.current?.focus()
+                                        } else {
+                                            ref_price3.current?.focus()
+                                            ref_price3.current?.setSelectionRange(newProduct.product_price_sale1_LAK.toString().length + 2, newProduct.product_price_sale1_LAK.toString().length + 2);
+                                        }
+                                    }
+                                }}
                                 label="LAK"
-                                value={newProduct.product_price_buy_LAK.toString()}
-                                onChange={(e) => setNewProduct({ ...newProduct, product_price_buy_LAK: parseInt(e.target.value) })}
+                                value={newProduct.product_price_buy_LAK.toLocaleString()}
+                                onChange={handlePriceBuyLAK}
                             />
                             <Input
                                 size={"md"}
                                 color='success'
-                                type="number"
+                                type="text"
                                 label="THB"
-                                value={newProduct.product_price_buy_THB.toString()}
-                                onChange={(e) => setNewProduct({ ...newProduct, product_price_buy_THB: parseInt(e.target.value) })}
+                                onKeyDown={(e) => {
+
+                                    if (e.key === "ArrowLeft") {
+                                        ref_price1.current?.focus();
+                                    }
+                                    if (e.key === "ArrowDown") {
+                                        ref_price4.current?.focus();
+                                        ref_price4.current?.setSelectionRange(newProduct.product_price_sale1_THB.toString().length + 2, newProduct.product_price_sale1_THB.toString().length + 2);
+                                    }
+                                    if (e.key === "Enter") {
+                                        if (newProduct.product_price_buy_THB === 0) {
+                                            ref_price2.current?.focus()
+                                        } else {
+                                            ref_price4.current?.focus()
+                                            ref_price4.current?.setSelectionRange(newProduct.product_price_sale1_THB.toString().length + 2, newProduct.product_price_sale1_THB.toString().length + 2);
+                                        }
+                                    }
+                                }}
+                                ref={ref_price2}
+                                value={newProduct.product_price_buy_THB.toLocaleString()}
+                                onChange={handlePriceBuyTHB}
                             />
                         </div>
                     </div>
@@ -364,18 +556,57 @@ const FormProduct = () => {
                             <Input
                                 size={"md"}
                                 color='primary'
-                                type="number"
+                                type="text"
                                 label="LAK"
-                                value={newProduct.product_price_sale1_LAK.toString()}
-                                onChange={(e) => setNewProduct({ ...newProduct, product_price_sale1_LAK: parseInt(e.target.value) })}
+                                ref={ref_price3}
+                                onKeyDown={(e) => {
+
+                                    if (e.key === "ArrowUp") {
+                                        ref_price1.current?.focus();
+                                    }
+                                    if (e.key === "ArrowDown") {
+                                        ref_price5.current?.focus();
+                                        ref_price5.current?.setSelectionRange(newProduct.product_price_sale2_LAK.toString().length + 2, newProduct.product_price_sale2_LAK.toString().length + 2);
+                                    }
+                                    if (e.key === "Enter") {
+                                        if (newProduct.product_price_sale1_LAK === 0) {
+                                            ref_price3.current?.focus()
+                                        } else {
+                                            ref_price5.current?.focus()
+                                            ref_price5.current?.setSelectionRange(newProduct.product_price_sale2_LAK.toString().length + 2, newProduct.product_price_sale2_LAK.toString().length + 2);
+                                        }
+                                    }
+                                }}
+                                value={newProduct.product_price_sale1_LAK.toLocaleString()}
+                                onChange={handlePriceSale1LAK}
                             />
                             <Input
                                 size={"md"}
                                 color='success'
-                                type="number"
+                                type="text"
                                 label="THB"
-                                value={newProduct.product_price_sale1_THB.toString()}
-                                onChange={(e) => setNewProduct({ ...newProduct, product_price_sale1_THB: parseInt(e.target.value) })}
+                                ref={ref_price4}
+                                onKeyDown={(e) => {
+
+                                    if (e.key === "ArrowUp") {
+                                        ref_price2.current?.focus();
+                                    }
+                                    if (e.key === "ArrowDown") {
+                                        ref_price6.current?.focus();
+                                        ref_price6.current?.setSelectionRange(newProduct.product_price_sale2_THB.toString().length + 2, newProduct.product_price_sale2_THB.toString().length + 2);
+
+                                    }
+                                    if (e.key === "Enter") {
+                                        if (newProduct.product_price_sale1_THB === 0) {
+                                            ref_price4.current?.focus()
+                                        } else {
+                                            ref_price6.current?.focus()
+                                            ref_price6.current?.setSelectionRange(newProduct.product_price_sale2_THB.toString().length + 2, newProduct.product_price_sale2_THB.toString().length + 2);
+                                        }
+                                    }
+                                }}
+                                value={newProduct.product_price_sale1_THB.toLocaleString()}
+                                onChange={handlePriceSale1THB}
                             />
                         </div>
                     </div>
@@ -385,18 +616,46 @@ const FormProduct = () => {
                             <Input
                                 size={"md"}
                                 color='primary'
-                                type="number"
+                                type="text"
                                 label="LAK"
-                                value={newProduct.product_price_sale2_LAK.toString()}
-                                onChange={(e) => setNewProduct({ ...newProduct, product_price_sale2_LAK: parseInt(e.target.value) })}
+                                ref={ref_price5}
+                                onKeyDown={(e) => {
+                                    if (e.key === "ArrowUp") {
+                                        ref_price3.current?.focus();
+                                    }
+                                    if (e.key === "Enter") {
+                                        if (newProduct.product_price_sale2_LAK === 0) {
+                                            ref_price5.current?.focus()
+                                        }
+                                        // if(newProduct.product_price_sale2_LAK > 0){
+                                        //     btnSubmit.current?.click();
+                                        // }
+                                    }
+                                }}
+                                value={newProduct.product_price_sale2_LAK.toLocaleString()}
+                                onChange={handlePriceSale2LAK}
                             />
                             <Input
                                 size={"md"}
                                 color='success'
-                                type="number"
+                                type="text"
                                 label="THB"
-                                value={newProduct.product_price_sale2_THB.toString()}
-                                onChange={(e) => setNewProduct({ ...newProduct, product_price_sale2_THB: parseInt(e.target.value) })}
+                                onKeyDown={(e) => {
+                                    if (e.key === "ArrowUp") {
+                                        ref_price4.current?.focus();
+                                    }
+                                    if (e.key === "Enter") {
+                                        if (newProduct.product_price_sale2_THB === 0) {
+                                            ref_price6.current?.focus()
+                                        }
+                                        // if(newProduct.product_price_sale2_THB > 0){
+                                        //     btnSubmit.current?.click();
+                                        // }
+                                    }
+                                }}
+                                ref={ref_price6}
+                                value={newProduct.product_price_sale2_THB.toLocaleString()}
+                                onChange={handlePriceSale2THB}
                             />
                         </div>
                     </div>

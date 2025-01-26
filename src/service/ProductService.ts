@@ -32,6 +32,10 @@ export async function addNewProduct(product: PD) {
 //     const products = await findAllProduct(page, limit);
 //     return products
 // }
+export async function findProductForRetail(id:string) {
+    const products = await findProductById(id);
+    console.log(products)
+}
 export async function getProducts() {
     const products = await findProducts();
     return products;

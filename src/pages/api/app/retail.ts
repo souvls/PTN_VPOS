@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 //create bill
                 const bill = await saleRetail(user_id, customer_id, total_lak,total_thb, exchange_rate, total_point, x, money, change);
                 // console.log(bill);
-                res.status(201).json  (bill);
+                res.status(201).json(bill);
                 break;
             case "PUT":
             default:

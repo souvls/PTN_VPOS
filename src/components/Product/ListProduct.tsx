@@ -188,7 +188,7 @@ const ListProduct = () => {
                                         <tr key={index}>
                                             <td className='border'>{item.product_id}</td>
                                             <td className='border'>{item.product_name}{" "}{item.product_size}</td>
-                                            <td className='border text-end'>{item.product_qty}{" "}{item.product_unit.unit_name}</td>
+                                            <td className='border text-end'>{item?.product_qty}{" "}{item?.product_unit.unit_name}</td>
                                             <td className='border text-end'>{item.product_price_buy_LAK > 0 ? item.product_price_buy_LAK.toLocaleString() : "-"}</td>
                                             <td className='border text-end'>{item.product_price_sale2_LAK > 0 ? item.product_price_sale2_LAK.toLocaleString() : "-"}</td>
                                             <td className='border text-end'>{item.product_price_buy_THB > 0 ? item.product_price_buy_THB.toLocaleString() : "-"}</td>

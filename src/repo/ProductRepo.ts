@@ -48,7 +48,7 @@ export async function ProductPaginate(page: number, limit: number) {
             .populate({
                 path: 'product_unit',
             })
-            // .sort({ updatedAt: -1 });
+            .sort({ updatedAt: -1 });
         return { length: length, result: paginate };
     } catch (err) {
         console.log(err);
