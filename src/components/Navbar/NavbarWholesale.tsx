@@ -33,7 +33,7 @@ const NavbarWholesale: React.FC<UserProps> = ({ id, username, user_name, user_ro
     }
     return (
         <div>
-            <div className='w-full bg-red-700  py-3'>
+            <div className='w-full bg-red-700 '>
                 <div className=' flex justify-between items-center'>
                     <div className=" flex items-center justify-start">
                         <Dropdown>
@@ -69,9 +69,9 @@ const NavbarWholesale: React.FC<UserProps> = ({ id, username, user_name, user_ro
                             <p>ຂາຍຍ່ອຍ</p>
                         </div>
                     </div>
-                    <div className='me-10'>
+                    {/* <div className='me-10'>
                         <Link href={"/wholesale"} target='bank' className=' bg-white p-2 rounded-lg'>ເປີດໜ້າໃໝ່</Link>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

@@ -34,7 +34,7 @@ export async function addNewProduct(product: PD) {
 // }
 export async function findProductForRetail(id:string) {
     const products = await findProductById(id);
-    console.log(products)
+    // console.log(products)
 }
 export async function getProducts() {
     const products = await findProducts();

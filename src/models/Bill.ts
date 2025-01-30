@@ -46,7 +46,8 @@ const BillSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    bill_item: {
+    bill_item:{
+
     },
     bill_money: {
         type: Number,

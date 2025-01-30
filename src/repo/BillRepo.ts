@@ -61,6 +61,39 @@ export async function createBill(user_id: string, customer_id: string, sale_type
         throw err
     }
 }
+export async function createBillWholesale(user_id: string, customer_id: string, sale_type: number, total_lak: number, total_thb: number, exchange_rate: number, total_point: number, cart: any[], money: number, change: number) {
+    try {
+
+        const countBill = await Bill.countDocuments();
+        //create bill
+        const newBill = new Bill({
+            bill_id: (countBill + 1).toString(),
+            bill_user_id: user_id,
+            bill_customer_id: customer_id,
+            bill_exchange_rate: exchange_rate,
+            bill_total_lak: total_lak,
+            bill_total_thb: total_thb,
+            bill_date_string: displayLaoDate(),
+            bill_date: new Date().getTime(),
+            bill_type: sale_type,
+            bill_total_point: total_point,
+            bill_item: cart,
+            bill_money: money,
+            bill_change: change
+        });
+        // //update qty
+        // await updateManyQTYProduct(jcart);
+        // //update point customer
+        // await updateCustomerPoint(customer_id, total_point);
+        //savebill
+        const bill = await newBill.save();
+        //return bill;
+        return bill;
+    } catch (err) {
+        console.log(err);
+        throw err
+    }
+}
 export async function findBillByID(id: string) {
     const bill = await Bill.findOne({ bill_id: id })
         .populate({

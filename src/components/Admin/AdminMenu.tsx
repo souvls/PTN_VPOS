@@ -30,11 +30,11 @@ const AdminMenu = () => {
                     </Link>
                 </div>
                 <div className='mt-5 w-full flex justify-center items-center gap-5  pt-10'>
-                    <Link href={"/retail"} className='w-60 bg-white rounded-xl p-2 hover:bg-sky-500 ease-out duration-200 hover:text-white'>
+                    <Link href={"/wholesale"} className='w-60 bg-white rounded-xl p-2 hover:bg-sky-500 ease-out duration-200 hover:text-white'>
                         <div className=' w-full flex justify-center items-center'>
                             <GrMoney size={50} />
                         </div>
-                        <p className=' text-center text-xl'>ຂາຍຍ່ອຍ</p>
+                        <p className=' text-center text-xl'>ຂາຍສົ່ງ</p>
                     </Link>
                     {/* href={"/wholesale"} */}
                     {/* <Link href={"#"} className='w-60 bg-white rounded-xl p-2 hover:bg-sky-500 ease-out duration-200 hover:text-white'>
