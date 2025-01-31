@@ -34,8 +34,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             case "PUT":
                 {
                     const { newProduct } = req.body
-                    const updatePRoduct = await updateOneProduct(newProduct);
-                    res.status(200).json({ code: 999, result: updatePRoduct });
+                    
+                    // console.log(newProduct);
+                    // const updatePRoduct = await updateOneProduct(newProduct);
+                    // res.status(200).json({ code: 999, result: updatePRoduct });
                 }
             case "PATCH":
                 {
@@ -46,7 +48,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     } else {
                         res.status(200).json({ code: 0, message: "ບໍ່ມີສິນຄ້ານີ້", result: [] });
                     }
-
                 }
 
             case "DELETE": {
@@ -59,6 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
 
             default:
+                res.status(401).json({});
         }
     } catch (err) {
         console.log(err);

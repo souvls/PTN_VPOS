@@ -24,9 +24,10 @@ interface Product {
 }
 interface TableProps {
     products: Product[];
+    page:Number
 }
 
-const TableProduct: React.FC<TableProps> = ({ products }) => {
+const TableProduct: React.FC<TableProps> = ({ products,page }) => {
     const [selectIndex, setSelectIndex] = React.useState(Number);
     const handleSelect = (e: number) => {
         setSelectIndex(e);
@@ -36,7 +37,7 @@ const TableProduct: React.FC<TableProps> = ({ products }) => {
             <table className='min-w-full table-auto'>
                 <thead className='bg-gray-200 sticky top-0 z-50'>
                     <tr className=''>
-                        <th className=' border  border-black py-2 '>ລຳດັບ</th>
+                        {/* <th className=' border  border-black py-2 '>ລຳດັບ</th> */}
                         <th className=' border  border-black py-2 '>ລະຫັດສິນຄ້າ</th>
                         <th className=' border  border-black py-2 '>ຊື່ສິນຄ້າ</th>
                         <th className=' border  border-black py-2 '>ຂະໜາດ</th>
@@ -61,7 +62,7 @@ const TableProduct: React.FC<TableProps> = ({ products }) => {
                     {products && products.map((item, index) => {
                         return (
                             <tr key={index} onClick={() => handleSelect(index)} className={`${index === selectIndex ? ' bg-blue-200 font-bold duration-100' : ' hover:bg-slate-300'} `}>
-                                <td className=' border  border-black text-center'>{index + 1}</td>
+                                {/* <td className=' border  border-black text-center'>{(Number(page)*20)-(Number(page)*20-index)+1}</td> */}
                                 <td className=' border  border-black py-1'>{item.product_id}</td>
                                 <td className=' border border-black'>{item.product_name}</td>
                                 <td className=' border  border-black'>{item.product_size}</td>

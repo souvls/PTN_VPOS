@@ -190,14 +190,13 @@ export async function putProduct(product: PD) {
                     product_exp: product.product_exp,
                     product_mfd: product.product_mfd,
                     product_address: product.product_address
-
                 }
             },
             { new: true }
         )
         return update
     } catch (err) {
-        console.log(err);
+        console.log("Error Repo update product"+err);
         throw err
     }
 

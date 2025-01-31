@@ -9,3 +9,12 @@ export async function getExchange() {
         throw err
     }
 }
+export async function changeExchange(newrate:number) {
+    try {
+        await Exchange.updateMany({$set:{exchange_rate:newrate}});
+        return true;
+    } catch (err) {
+        console.log(err);
+        throw err
+    }
+}

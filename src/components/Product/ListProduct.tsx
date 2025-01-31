@@ -29,9 +29,6 @@ interface Product {
     product_mfd: Date;
     product_address: string
 }
-interface Data {
-    productList: Product[]
-}
 
 const ListProduct = () => {
     const [pages, setPages] = useState(1);
@@ -50,21 +47,25 @@ const ListProduct = () => {
         setTitle("ລາຍການສິນຄ້າທັງໝົດ");
         fetchProduct();
     }, []);
-    useMemo(() => {
-        const fetchdata = async () => {
-            const res = await axios.get(`/api/products?pages=${pages}=&limit=${limit}`);
-            setProducts(res.data.result.result);
-        }
-        fetchdata();
-    }, [pages]);
+    // useMemo(() => {
+    //     const fetchdata = async () => {
+
+    //         setProducts(res.data.result.result);
+    //     }
+    //     fetchdata();
+    // }, [pages]);
 
     const fetchProduct = async () => {
-        setLoading(true);
-        const res = await axios.get(`/api/products?pages=${pages}&limit=${20}`);
-        setProducts(res.data.result.result);
-        setLength(res.data.result.length);
-        setShowPaginate(true);
-        setLoading(false);
+        try {
+            setLoading(true);
+            const res = await axios.get(`/api/products?pages=${pages}&limit=${20}`);
+            setProducts(res.data.result.result);
+            setLength(res.data.result.length);
+            setShowPaginate(true);
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
     }
     const allProduct = async () => {
         setLoading(true);
@@ -74,6 +75,15 @@ const ListProduct = () => {
     }
     const handlePageChange = async (page: number) => {
         setPages(page);
+        try {
+            setLoading(true);
+            const res = await axios.get(`/api/products?pages=${page}&limit=${limit}`);
+            setProducts(res.data.result.result);
+            setLoading(false);
+
+        } catch (error) {
+            console.log(error);
+        }
     }
     const searchKey = async () => {
         if (key) {
@@ -148,7 +158,7 @@ const ListProduct = () => {
                 </div>
                 <div className=' flex justify-start gap-3 me-5'>
                     <div className=' flex items-center gap-2'>
-                        <Input type="Number" className='w-14' value={qtySerach.toString()} onChange={e => setQtySearch(parseInt(e.target.value))} min={0} />
+                        <Input type="Number" className='w-14' value={qtySerach.toString()} onChange={e => setQtySearch(parseInt(e.target.value))} />
                         <Button onClick={handleSearchQty} color='warning'>ສິນຄ້າເຫຼືອນ້ອຍ</Button>
                     </div>
                     <Button onClick={handleExsoon} color='danger'>ສິນຄ້າໃກ້ໝົດອາຍຸ</Button>
@@ -161,7 +171,7 @@ const ListProduct = () => {
             {loading && <p className=' text-green-500 px-5 font-bold'>...loading</p>}
             {products &&
                 <>
-                    <TableProduct products={products} />
+                    <TableProduct products={products} page={pages}/>
                     {showPaginate && <div className=' flex my-5 justify-center'><Pagination total={length} initialPage={1} onChange={handlePageChange} /></div>}
                 </>
             }

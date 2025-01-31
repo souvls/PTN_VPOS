@@ -127,10 +127,29 @@ export async function findBillBetweenDate(date_start: string, date_end: string) 
         console.error(error);
     }
 }
+export async function getBills() {
+    const bills = await Bill.find()
+        .populate({
+            path: 'bill_customer_id',
+        })
+        .populate({
+            path: 'bill_user_id',
+        })
+        .limit(10)
+        .sort({ createdAt: -1 })
+    return bills;
+}
 export async function updateStatus(id: string, bill_id: string) {
     const update = await Bill.findOneAndUpdate(
         { bill_id: bill_id },
         { $set: { bill_status: "cancel", user_cancelBill: id } },
+    )
+    return update;
+}
+export async function updateStatus2(bill_id: string) {
+    const update = await Bill.findOneAndUpdate(
+        { bill_id: bill_id },
+        { $set: { bill_status: "cancel" } },
     )
     return update;
 }

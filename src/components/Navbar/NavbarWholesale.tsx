@@ -55,7 +55,7 @@ const NavbarWholesale: React.FC<UserProps> = ({ id, username, user_name, user_ro
                                     {user_role === "admin" && <Link href={"/admin"}>admin</Link>}
                                 </DropdownItem>
                                 <DropdownItem >
-                                    <Link href={"/mybill"}>ຈັດການໃບບິນ</Link>
+                                    <Link href={"/admin/invoice"}>ຈັດການໃບບິນ</Link>
                                 </DropdownItem>
                                 <DropdownItem onClick={handleLogout} key="delete" className="text-danger" color="danger">
                                     ອອກຈາກລະບົບ

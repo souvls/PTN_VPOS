@@ -71,13 +71,19 @@ const Wholesale_page: React.FC<{ id: String }> = (id) => {
           const { value: qty } = await Swal.fire({
             title: "ໃສ່ຈຳນວນ",
             input: "number",
-            inputLabel: "Your email address",
-            inputPlaceholder: "Enter your email address"
+            inputLabel: _product.product_name + " " + _product.product_size,
+            inputPlaceholder: _product.product_unit.unit_name
           });
           if (qty) {
             if (qty > 0) {
               addToCart(_product, Number(qty));
+            } else {
+              Swal.showValidationMessage(`
+                ຈຳນວນບໍ່ຖືກ
+              `);
             }
+          } else {
+            addToCart(_product, 1);
           }
 
         }

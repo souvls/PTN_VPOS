@@ -36,16 +36,15 @@ interface ProductPageProps {
 const page: React.FC<ProductPageProps> = ({ params }) => {
     const router = useRouter();
     const { id } = params;
-    const [newProduct, setNewProduct] = React.useState(product);
+    const [newProduct, setNewProduct] = React.useState<any>({});
     const [unitsList, setUnitList] = React.useState([{
         _id: "",
         unit_name: ""
     }]);
-    const [categoryList, setCategoryList] = React.useState([
-        {
-            _id: "",
-            category_name: ""
-        }]);
+    const [categoryList, setCategoryList] = React.useState<{
+        _id: string,
+        category_name: string
+    }[]>([]);
     const [isLoading, setIsLoading] = React.useState(false);
     const [errors, setErrors] = React.useState({ product_id: "", product_name: "" });
 
@@ -90,7 +89,7 @@ const page: React.FC<ProductPageProps> = ({ params }) => {
             }).then(async result => {
                 if (result.isConfirmed) {
                     setIsLoading(true)
-                    const res = await axios.put("/api/products", { newProduct })
+                    const res = await axios.put("/api/put-product", { newProduct })
                     setIsLoading(false)
                     if (res.data.code === 999) {
                         Swal.fire({
@@ -98,6 +97,7 @@ const page: React.FC<ProductPageProps> = ({ params }) => {
                             icon: "success",
                             timer: 1000
                         })
+                        router.back();
                     }
                 }
             })
@@ -127,7 +127,7 @@ const page: React.FC<ProductPageProps> = ({ params }) => {
                         icon: "success",
                         timer: 1000
                     })
-                    router.push("/admin/front-manager/list-product")
+                    router.back();
                 }
             }
         });
@@ -188,14 +188,14 @@ const page: React.FC<ProductPageProps> = ({ params }) => {
                                 variant="bordered"
                                 type="number"
                                 label="ຈຳນວນ"
-                                value={newProduct.product_qty.toString()}
+                                value={newProduct.product_qty}
                                 onChange={(e) => setNewProduct({ ...newProduct, product_qty: parseInt(e.target.value) })}
                             />
                             <div className='w-full'>
                                 <p>ໜ່ວຍເອີ້ນສິນຄ້າ</p>
                                 <select
                                     className=' border py-2 rounded-lg'
-                                    value={newProduct.product_unit._id}
+                                    value={newProduct.product_unit?._id}
                                     onChange={(e) => setNewProduct({
                                         ...newProduct, product_unit: {
                                             ...newProduct.product_unit,
@@ -216,7 +216,7 @@ const page: React.FC<ProductPageProps> = ({ params }) => {
                                 <p>ປະເພດສິນຄ້າ</p>
                                 <select
                                     className=' border py-2 rounded-lg'
-                                    value={newProduct.product_category._id}
+                                    value={newProduct.product_category?._id}
                                     onChange={(e) => setNewProduct({
                                         ...newProduct, product_category: {
                                             ...newProduct.product_category,
@@ -240,7 +240,7 @@ const page: React.FC<ProductPageProps> = ({ params }) => {
                                 variant="bordered"
                                 type="number"
                                 label="ສ່ວນຫຼຸດ %"
-                                value={newProduct.product_discount.toString()}
+                                value={newProduct?.product_discount?.toString()}
                                 onChange={(e) => setNewProduct({ ...newProduct, product_discount: parseInt(e.target.value) })}
                             />
                             <Input
@@ -248,7 +248,7 @@ const page: React.FC<ProductPageProps> = ({ params }) => {
                                 variant="bordered"
                                 type="number"
                                 label="ຄະແນນ"
-                                value={newProduct.product_point.toString()}
+                                value={newProduct?.product_point?.toString()}
                                 onChange={(e) => setNewProduct({ ...newProduct, product_point: parseInt(e.target.value) })}
                             />
                         </div>
@@ -292,7 +292,7 @@ const page: React.FC<ProductPageProps> = ({ params }) => {
                                     color='primary'
                                     type="number"
                                     label="LAK"
-                                    value={newProduct.product_price_buy_LAK.toString()}
+                                    value={newProduct?.product_price_buy_LAK?.toString()}
                                     onChange={(e) => setNewProduct({ ...newProduct, product_price_buy_LAK: parseInt(e.target.value) })}
                                 />
                                 <Input
@@ -300,7 +300,7 @@ const page: React.FC<ProductPageProps> = ({ params }) => {
                                     color='success'
                                     type="number"
                                     label="THB"
-                                    value={newProduct.product_price_buy_THB.toString()}
+                                    value={newProduct?.product_price_buy_THB?.toString()}
                                     onChange={(e) => setNewProduct({ ...newProduct, product_price_buy_THB: parseInt(e.target.value) })}
                                 />
                             </div>
@@ -313,7 +313,7 @@ const page: React.FC<ProductPageProps> = ({ params }) => {
                                     color='primary'
                                     type="number"
                                     label="LAK"
-                                    value={newProduct.product_price_sale1_LAK.toString()}
+                                    value={newProduct?.product_price_sale1_LAK?.toString()}
                                     onChange={(e) => setNewProduct({ ...newProduct, product_price_sale1_LAK: parseInt(e.target.value) })}
                                 />
                                 <Input
@@ -321,7 +321,7 @@ const page: React.FC<ProductPageProps> = ({ params }) => {
                                     color='success'
                                     type="number"
                                     label="THB"
-                                    value={newProduct.product_price_sale1_THB.toString()}
+                                    value={newProduct?.product_price_sale1_THB?.toString()}
                                     onChange={(e) => setNewProduct({ ...newProduct, product_price_sale1_THB: parseInt(e.target.value) })}
                                 />
                             </div>
@@ -334,7 +334,7 @@ const page: React.FC<ProductPageProps> = ({ params }) => {
                                     color='primary'
                                     type="number"
                                     label="LAK"
-                                    value={newProduct.product_price_sale2_LAK.toString()}
+                                    value={newProduct?.product_price_sale2_LAK?.toString()}
                                     onChange={(e) => setNewProduct({ ...newProduct, product_price_sale2_LAK: parseInt(e.target.value) })}
                                 />
                                 <Input
@@ -342,7 +342,7 @@ const page: React.FC<ProductPageProps> = ({ params }) => {
                                     color='success'
                                     type="number"
                                     label="THB"
-                                    value={newProduct.product_price_sale2_THB.toString()}
+                                    value={newProduct?.product_price_sale2_THB?.toString()}
                                     onChange={(e) => setNewProduct({ ...newProduct, product_price_sale2_THB: parseInt(e.target.value) })}
                                 />
                             </div>
